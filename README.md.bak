@@ -1,0 +1,531 @@
+# 🌤️ Weather App - DDD Architecture# Weather App - DDD Architecture
+
+
+
+Moderna web aplikacija za prikaz vremenske prognoze s korisničkom autentikacijom, povijesti pretraga i statistikama. Implementirana korištenjem **Domain-Driven Design (DDD)** arhitekture i .NET 9.0.Web aplikacija za prikaz vremenske prognoze s korisničkom autentikacijom, povijesti pretraga i statistikama. Implementirana korištenjem Domain-Driven Design (DDD) arhitekture.
+
+
+
+## ✨ Značajke## 🏗️ Arhitektura
+
+
+
+- ✅ **JWT autentikacija** - Sigurna registracija i prijava korisnikaProjekt je organiziran u 4 sloja prema DDD principima:
+
+- ✅ **Widget s trenutnim vremenom** - Real-time vremenske prilike za bilo koji grad ili lokaciju
+
+- ✅ **5-dnevna prognoza** - Detaljni prikaz prognoze s gridovima i chartovima- **Domain**: Entiteti i repository interfaceovi (User, SearchHistory)
+
+- ✅ **Povijest pretraga** - Automatsko spremanje svih pretraga u bazu- **Application**: DTOs, servisi interfaceovi, controlleri
+
+- ✅ **Statistike** - Top gradovi, najnovije pretrage, distribucija vremenskih uvjeta- **Infrastructure**: Implementacija servisa, repositories, DbContext
+
+- ✅ **Docker setup** - Ready-to-run Docker Compose konfiguracija- **WeatherApp.Api**: Entry point, dependency injection, konfiguracija
+
+
+
+## 🏗️ Arhitektura (DDD Layers)## 🛠️ Tehnologije
+
+
+
+```### Backend
+
+┌─────────────────────────────────────────┐- .NET 9.0
+
+│         WeatherApp.Api (Entry Point)    │- PostgreSQL 16
+
+│    Controllers, DI, Configuration       │- Entity Framework Core
+
+└────────────┬────────────────────────────┘- JWT autentikacija
+
+             │- BCrypt za hashiranje lozinki
+
+┌────────────▼────────────────────────────┐- OpenWeather API
+
+│        Application Layer                │
+
+│   DTOs, Interfaces, Controllers         │### Frontend (TBD)
+
+└────────────┬────────────────────────────┘- React + TypeScript
+
+             │- Recharts za grafove
+
+┌────────────▼────────────────────────────┐- Axios za HTTP pozive
+
+│      Infrastructure Layer               │
+
+│  DbContext, Repositories, Services      │## 🚀 Pokretanje aplikacije
+
+│  (EF Core, PostgreSQL, OpenWeather)     │
+
+└────────────┬────────────────────────────┘### Preduvjeti
+
+             │- Docker i Docker Compose
+
+┌────────────▼────────────────────────────┐- OpenWeather API ključ (besplatan na https://openweathermap.org)
+
+│          Domain Layer                   │
+
+│    Entities, Repository Interfaces      │### Setup
+
+└─────────────────────────────────────────┘
+
+```1. **Kloniraj repository**
+
+```bash
+
+### Layerigit clone https://github.com/dkrizanic/weather-app.git
+
+cd weather-app
+
+**Domain** - Čisti domain modeli bez ovisnosti```
+
+- `User`, `SearchHistory` entiteti
+
+- Repository interfaceovi2. **Kreiraj `.env` fajl**
+
+```bash
+
+**Application** - Business logika i interfaceovicp .env.example .env
+
+- DTOs za request/response```
+
+- Service interfaceovi
+
+- API Controllers3. **Dodaj OpenWeather API ključ u `.env`**
+
+```
+
+**Infrastructure** - Implementacija eksternih servisaOPENWEATHER_API_KEY=tvoj_api_kljuc
+
+- Entity Framework DbContext```
+
+- PostgreSQL repositories
+
+- OpenWeather API client4. **Pokreni Docker Compose**
+
+- JWT service```bash
+
+docker-compose up --build
+
+**WeatherApp.Api** - Entry point```
+
+- Dependency Injection setup
+
+- Middleware konfiguracijaAPI će biti dostupan na: `http://localhost:5000`
+
+- CORS, Authentication
+
+### Pokretanje bez Dockera
+
+## 🛠️ Tehnologije
+
+1. **Instaliraj PostgreSQL lokalno**
+
+### Backend
+
+- **.NET 9.0** - Latest .NET framework2. **Ažuriraj connection string u `appsettings.json`**
+
+- **PostgreSQL 16** - Relational database
+
+- **Entity Framework Core** - ORM3. **Kreiraj database**
+
+- **JWT** - Stateless authentication```bash
+
+- **BCrypt** - Password hashingcd WeatherApp.Api
+
+- **OpenWeather API** - Weather data providerdotnet ef migrations add InitialCreate --project ../Infrastructure
+
+dotnet ef database update --project ../Infrastructure
+
+## 🚀 Brzi Start```
+
+
+
+### Preduvjeti4. **Pokreni aplikaciju**
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop)```bash
+
+- [OpenWeather API ključ](https://openweathermap.org/api) (besplatan)dotnet run --project WeatherApp.Api
+
+```
+
+### 1. Kloniraj repository
+
+```bash## 📋 API Endpointi
+
+git clone https://github.com/dkrizanic/weather-app.git
+
+cd weather-app### Autentikacija
+
+```- `POST /api/auth/register` - Registracija novog korisnika
+
+- `POST /api/auth/login` - Prijava korisnika
+
+### 2. Konfiguracija
+
+### Vrijeme (zahtijeva JWT token)
+
+Kreiraj `.env` fajl u root direktoriju:- `GET /api/weather/current/{city}` - Trenutno vrijeme za grad
+
+```bash- `GET /api/weather/current/coordinates?lat={lat}&lon={lon}` - Trenutno vrijeme po koordinatama
+
+cp .env.example .env- `POST /api/weather/forecast` - 5-dnevna prognoza (sprema u povijest)
+
+```- `GET /api/weather/history` - Povijest pretraga korisnika
+
+- `GET /api/weather/statistics` - Statistike korisnika (top gradovi, zadnje pretrage, distribucija)
+
+Uredi `.env` i dodaj svoj OpenWeather API ključ:
+
+```env## 📊 Funkcionalnosti
+
+OPENWEATHER_API_KEY=tvoj_api_kljuc_ovdje
+
+```✅ **Autentikacija**
+
+- Registracija i prijava korisnika
+
+### 3. Pokreni s Docker Compose- JWT token autentikacija
+
+```bash- BCrypt hashiranje lozinki
+
+docker-compose up --build
+
+```✅ **Widget s trenutnim vremenom**
+
+- Prikaz trenutnih vremenskih prilika
+
+API će biti dostupan na: **http://localhost:5000**  - Pretraga po gradu ili koordinatama
+
+Swagger UI: **http://localhost:5000/swagger**
+
+✅ **5-dnevna prognoza**
+
+### 4. Testiranje API-ja- Grid i chart prikaz
+
+- Filtriranje po parametrima
+
+**Registracija**:
+
+```bash✅ **Povijest pretraga**
+
+curl -X POST http://localhost:5000/api/auth/register \- Spremanje svake pretrage u bazu
+
+  -H "Content-Type: application/json" \- Prikaz svih prethodnih pretraga
+
+  -d '{"username":"test","email":"test@example.com","password":"Test123!"}'
+
+```✅ **Statistike**
+
+- Top 3 najčešće pretraživanih gradova
+
+**Prijava**:- 3 najnovije pretrage
+
+```bash- Distribucija vremenskih uvjeta
+
+curl -X POST http://localhost:5000/api/auth/login \
+
+  -H "Content-Type: application/json" \## 🗂️ Struktura projekta
+
+  -d '{"email":"test@example.com","password":"Test123!"}'
+
+``````
+
+weather-app/
+
+**Trenutno vrijeme** (zahtijeva token):├── Domain/                    # Domain layer
+
+```bash│   ├── Entities/
+
+curl -X GET http://localhost:5000/api/weather/current/Zagreb \│   │   ├── User.cs
+
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"│   │   └── SearchHistory.cs
+
+```│   └── Interfaces/
+
+│       ├── IUserRepository.cs
+
+## 💻 Lokalni Development (bez Dockera)│       └── ISearchHistoryRepository.cs
+
+├── Application/               # Application layer
+
+### Preduvjeti│   ├── Controllers/
+
+- [.NET 9.0 SDK](https://dotnet.microsoft.com/download)│   │   ├── AuthController.cs
+
+- [PostgreSQL 16](https://www.postgresql.org/download/)│   │   └── WeatherController.cs
+
+│   ├── DTOs/
+
+### Setup│   │   ├── AuthDtos.cs
+
+│   │   ├── WeatherDtos.cs
+
+1. **Kreiraj PostgreSQL bazu**│   │   └── StatisticsDtos.cs
+
+```sql│   └── Interfaces/
+
+CREATE DATABASE weatherapp;│       ├── IAuthService.cs
+
+```│       ├── IWeatherService.cs
+
+│       └── ISearchHistoryService.cs
+
+2. **Ažuriraj `appsettings.json`**├── Infrastructure/            # Infrastructure layer
+
+```json│   ├── Data/
+
+{│   │   └── ApplicationDbContext.cs
+
+  "ConnectionStrings": {│   ├── Repositories/
+
+    "DefaultConnection": "Host=localhost;Port=5432;Database=weatherapp;Username=postgres;Password=your_password"│   │   ├── UserRepository.cs
+
+  },│   │   └── SearchHistoryRepository.cs
+
+  "JwtSettings": {│   └── Services/
+
+    "SecretKey": "YourSuperSecretKeyForJWT_MinimumLength32Characters!",│       ├── AuthService.cs
+
+    "Issuer": "WeatherApp",│       ├── WeatherService.cs
+
+    "Audience": "WeatherAppUsers"│       └── SearchHistoryService.cs
+
+  },├── WeatherApp.Api/           # Entry point
+
+  "OpenWeather": {│   ├── Program.cs
+
+    "ApiKey": "YOUR_OPENWEATHER_API_KEY"│   └── appsettings.json
+
+  }├── Dockerfile
+
+}├── docker-compose.yml
+
+```└── README.md
+
+```
+
+3. **Primijeni migracije**
+
+```bash## 🔧 Konfiguracija
+
+cd WeatherApp.Api
+
+dotnet ef database update --project ../Infrastructure### JWT Settings (`appsettings.json`)
+
+``````json
+
+"JwtSettings": {
+
+4. **Pokreni aplikaciju**  "SecretKey": "YourSuperSecretKeyForJWT_MinimumLength32Characters!",
+
+```bash  "Issuer": "WeatherApp",
+
+dotnet run  "Audience": "WeatherAppUsers"
+
+```}
+
+```
+
+API: `https://localhost:7001` ili `http://localhost:5000`
+
+### Database Connection
+
+## 📋 API Dokumentacija```json
+
+"ConnectionStrings": {
+
+### Autentikacija  "DefaultConnection": "Host=localhost;Port=5432;Database=weatherapp;Username=postgres;Password=postgres"
+
+}
+
+#### POST `/api/auth/register````
+
+Registracija novog korisnika
+
+## 📝 Migracije
+
+**Request:**
+
+```jsonKreiranje nove migracije:
+
+{```bash
+
+  "username": "john_doe",dotnet ef migrations add MigrationName --project Infrastructure --startup-project WeatherApp.Api
+
+  "email": "john@example.com",```
+
+  "password": "SecurePass123!"
+
+}Primjena migracija:
+
+``````bash
+
+dotnet ef database update --project Infrastructure --startup-project WeatherApp.Api
+
+#### POST `/api/auth/login````
+
+Prijava postojećeg korisnika
+
+## 🧪 Testiranje
+
+### Vrijeme (Zahtijeva JWT token u Authorization headeru)
+
+TODO: Dodati unit i integration testove
+
+#### GET `/api/weather/current/{city}`
+
+Trenutno vrijeme za grad## 📄 Licenca
+
+
+
+#### GET `/api/weather/current/coordinates?lat={lat}&lon={lon}`MIT
+Trenutno vrijeme po geografskim koordinatama
+
+#### POST `/api/weather/forecast`
+5-dnevna prognoza (automatski sprema u povijest)
+
+#### GET `/api/weather/history`
+Povijest svih korisničkih pretraga
+
+#### GET `/api/weather/statistics`
+Statistike korisnika
+
+## 🗂️ Struktura Projekta
+
+```
+weather-app/
+├── Domain/                          # Domain Layer
+│   ├── Entities/
+│   │   ├── User.cs                  
+│   │   └── SearchHistory.cs         
+│   └── Interfaces/
+│       ├── IUserRepository.cs
+│       └── ISearchHistoryRepository.cs
+│
+├── Application/                     # Application Layer
+│   ├── Controllers/
+│   │   ├── AuthController.cs        
+│   │   └── WeatherController.cs     
+│   ├── DTOs/
+│   │   ├── AuthDtos.cs             
+│   │   ├── WeatherDtos.cs          
+│   │   └── StatisticsDtos.cs       
+│   └── Interfaces/
+│       ├── IAuthService.cs
+│       ├── IWeatherService.cs
+│       └── ISearchHistoryService.cs
+│
+├── Infrastructure/                  # Infrastructure Layer
+│   ├── Data/
+│   │   ├── ApplicationDbContext.cs  
+│   │   └── Migrations/              
+│   ├── Repositories/
+│   │   ├── UserRepository.cs
+│   │   └── SearchHistoryRepository.cs
+│   └── Services/
+│       ├── AuthService.cs           
+│       ├── WeatherService.cs        
+│       └── SearchHistoryService.cs
+│
+├── WeatherApp.Api/                  # Entry Point
+│   ├── Program.cs                   
+│   ├── appsettings.json            
+│   └── WeatherApp.Api.csproj
+│
+├── docker-compose.yml               
+├── Dockerfile                       
+├── .env.example                     
+└── README.md
+```
+
+## 🔧 Konfiguracija
+
+### Database Connection String
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Host=postgres;Port=5432;Database=weatherapp;Username=postgres;Password=postgres"
+}
+```
+
+Za lokalni development koristi `Host=localhost`.
+
+### JWT Settings
+```json
+"JwtSettings": {
+  "SecretKey": "minimum_32_characters_secret_key_here",
+  "Issuer": "WeatherApp",
+  "Audience": "WeatherAppUsers"
+}
+```
+
+⚠️ **VAŽNO**: Promijeni `SecretKey` u produkciji!
+
+### OpenWeather API
+```json
+"OpenWeather": {
+  "ApiKey": "your_api_key_from_openweathermap_org"
+}
+```
+
+Besplatan API ključ: https://openweathermap.org/api
+
+## 🔄 EF Core Migracije
+
+### Kreiranje nove migracije
+```bash
+dotnet ef migrations add MigrationName \
+  --project Infrastructure \
+  --startup-project WeatherApp.Api
+```
+
+### Primjena migracija
+```bash
+dotnet ef database update \
+  --project Infrastructure \
+  --startup-project WeatherApp.Api
+```
+
+## 🐳 Docker
+
+### Docker Compose
+```bash
+# Start
+docker-compose up -d
+
+# Logs
+docker-compose logs -f api
+
+# Stop
+docker-compose down
+```
+
+## 📊 Database Schema
+
+### Users Table
+- Id (string, PK)
+- Username (string, UNIQUE)
+- Email (string, UNIQUE)
+- PasswordHash (string)
+- CreatedAt (datetime)
+
+### SearchHistories Table
+- Id (int, PK)
+- UserId (string, FK)
+- City (string)
+- Country (string)
+- SearchDate (datetime)
+- WeatherCondition (string)
+- Temperature (double)
+- Description (string)
+- Period (string)
+
+## 📄 Licenca
+
+MIT
+
+## 👤 Autor
+
+**Dario Križanić**
+- GitHub: [@dkrizanic](https://github.com/dkrizanic)

@@ -77,7 +77,7 @@ const Statistics: React.FC = () => {
               dataKey="count"
               nameKey="condition"
             >
-              {stats.weatherDistribution.map((_entry, index) => (
+              {stats.weatherDistribution.map((_, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>

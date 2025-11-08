@@ -40,8 +40,9 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # React build
-/client/build
-/client/dist
+/client/
+/front/build
+/front/dist
 
 # IDE
 .vscode/
