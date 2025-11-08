@@ -1,0 +1,63 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: weatherapp-postgres
+    environment:
+      POSTGRES_DB: weatherapp
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - weatherapp-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: weatherapp-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=weatherapp;Username=postgres;Password=postgres
+      - JwtSettings__SecretKey=YourSuperSecretKeyForJWT_MinimumLength32Characters!
+      - JwtSettings__Issuer=WeatherApp
+      - JwtSettings__Audience=WeatherAppUsers
+      - OpenWeather__ApiKey=${OPENWEATHER_API_KEY}
+    ports:
+      - "5000:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - weatherapp-network
+    restart: unless-stopped
+
+  client:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    container_name: weatherapp-client
+    environment:
+      - VITE_API_URL=http://localhost:5000/api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    networks:
+      - weatherapp-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  weatherapp-network:
+    driver: bridge
