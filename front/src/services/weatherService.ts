@@ -13,12 +13,21 @@ export interface CurrentWeather {
 
 export interface ForecastDay {
   date: string;
-  temperature: number;
-  feelsLike: number;
+  temp: number;
+  tempMin: number;
+  tempMax: number;
   description: string;
+  condition: string;
   humidity: number;
   windSpeed: number;
+  precipitation: number;
   icon: string;
+}
+
+export interface ForecastData {
+  city: string;
+  country: string;
+  days: ForecastDay[];
 }
 
 export interface SearchHistory {
@@ -48,7 +57,7 @@ export const weatherService = {
     return response.data;
   },
 
-  async getForecast(city: string): Promise<ForecastDay[]> {
+  async getForecast(city: string): Promise<ForecastData> {
     const response = await api.post('/weather/forecast', { city });
     return response.data;
   },

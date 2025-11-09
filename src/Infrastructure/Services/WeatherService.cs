@@ -122,7 +122,7 @@ public class WeatherService : IWeatherService
         {
             City = cityData.GetProperty("name").GetString() ?? city,
             Country = cityData.GetProperty("country").GetString() ?? "",
-            Days = dailyForecasts.Values.OrderBy(d => d.Date).Take(5).ToList()
+            Days = dailyForecasts.Values.OrderBy(d => d.Date).ToList()
         };
     }
 }
