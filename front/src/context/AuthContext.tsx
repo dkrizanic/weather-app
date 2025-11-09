@@ -7,30 +7,34 @@ interface AuthContextType {
   register: (username: string, email: string, password: string) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<AuthResponse | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = authService.getToken();
-    if (token) {
-      // In a real app, you'd validate the token with the backend
-      setUser({ token, username: '', email: '' });
+    const savedUser = authService.getUser();
+    if (savedUser) {
+      setUser(savedUser);
     }
+    setLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {
     const response = await authService.login({ email, password });
     authService.setToken(response.token);
+    authService.setUser(response);
     setUser(response);
   };
 
   const register = async (username: string, email: string, password: string) => {
     const response = await authService.register({ username, email, password });
     authService.setToken(response.token);
+    authService.setUser(response);
     setUser(response);
   };
 
@@ -40,7 +44,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, login, register, logout, isAuthenticated: !!user, loading }}>
       {children}
     </AuthContext.Provider>
   );
