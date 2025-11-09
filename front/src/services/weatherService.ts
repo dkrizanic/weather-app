@@ -32,7 +32,7 @@ export interface SearchHistory {
 }
 
 export interface Statistics {
-  topCities: Array<{ city: string; count: number }>;
+  topCities: Array<{ city: string; searchCount: number }>;
   recentSearches: SearchHistory[];
   weatherDistribution: Array<{ condition: string; count: number }>;
 }
