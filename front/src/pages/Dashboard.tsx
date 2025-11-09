@@ -1,18 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { weatherService, CurrentWeather, ForecastDay } from '../services/weatherService';
 import WeatherCard from '../components/WeatherCard';
 import ForecastChart from '../components/ForecastChart';
+
+interface SavedLocation {
+  latitude: number;
+  longitude: number;
+  city: string;
+}
 
 const Dashboard: React.FC = () => {
   const [city, setCity] = useState('');
   const [currentWeather, setCurrentWeather] = useState<CurrentWeather | null>(null);
   const [forecast, setForecast] = useState<ForecastDay[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // Start with loading true
   const [error, setError] = useState('');
+  const [hasLoadedInitial, setHasLoadedInitial] = useState(false);
+
+  // Load saved location on component mount
+  useEffect(() => {
+    const loadSavedLocation = async () => {
+      const savedLocationStr = localStorage.getItem('savedLocation');
+      if (savedLocationStr) {
+        try {
+          const savedLocation: SavedLocation = JSON.parse(savedLocationStr);
+          
+          const weather = await weatherService.getCurrentWeatherByCoordinates(
+            savedLocation.latitude,
+            savedLocation.longitude
+          );
+          setCurrentWeather(weather);
+          setCity(weather.city);
+          const forecastData = await weatherService.getForecast(weather.city);
+          setForecast(forecastData);
+        } catch (err: any) {
+          console.error('Failed to load saved location:', err);
+          // Clear invalid saved location
+          localStorage.removeItem('savedLocation');
+        }
+      }
+      setLoading(false);
+      setHasLoadedInitial(true);
+    };
+
+    loadSavedLocation();
+  }, []);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!city.trim()) return;
+
+    if (!hasLoadedInitial) return; // Prevent search during initial load
 
     setLoading(true);
     setError('');
@@ -24,6 +62,8 @@ const Dashboard: React.FC = () => {
       ]);
       setCurrentWeather(weather);
       setForecast(forecastData);
+      // Clear saved location when manually searching
+      localStorage.removeItem('savedLocation');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to fetch weather data');
     } finally {
@@ -46,6 +86,14 @@ const Dashboard: React.FC = () => {
             setCity(weather.city);
             const forecastData = await weatherService.getForecast(weather.city);
             setForecast(forecastData);
+            
+            // Save location to localStorage
+            const savedLocation: SavedLocation = {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+              city: weather.city
+            };
+            localStorage.setItem('savedLocation', JSON.stringify(savedLocation));
           } catch (err: any) {
             setError('Failed to fetch weather data');
           } finally {
