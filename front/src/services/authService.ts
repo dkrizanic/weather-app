@@ -30,6 +30,7 @@ export const authService = {
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
   },
 
   getToken(): string | null {
@@ -38,5 +39,21 @@ export const authService = {
 
   setToken(token: string) {
     localStorage.setItem('token', token);
+  },
+
+  getUser(): AuthResponse | null {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      try {
+        return JSON.parse(userStr);
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  },
+
+  setUser(user: AuthResponse) {
+    localStorage.setItem('user', JSON.stringify(user));
   },
 };
