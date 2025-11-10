@@ -49,7 +49,7 @@ public class WeatherController : ControllerBase
     }
 
     [HttpPost("forecast")]
-    public async Task<ActionResult<ForecastDto>> GetForecast([FromBody] WeatherSearchDto searchDto)
+    public async Task<ActionResult<ForecastDto>> GetForecast([FromBody] WeatherSearchDto searchDto, [FromQuery] bool saveHistory = true)
     {
         try
         {
@@ -61,11 +61,15 @@ public class WeatherController : ControllerBase
 
             var forecast = await _weatherService.GetForecastAsync(searchDto.City);
             
-            // Get current weather to save in search history
-            var currentWeather = await _weatherService.GetCurrentWeatherAsync(searchDto.City);
-            
-            // Save search history
-            await _searchHistoryService.SaveSearchAsync(userId, searchDto.City, searchDto, currentWeather);
+            // Only save search history if explicitly requested
+            if (saveHistory)
+            {
+                // Get current weather to save in search history
+                var currentWeather = await _weatherService.GetCurrentWeatherAsync(searchDto.City);
+                
+                // Save search history
+                await _searchHistoryService.SaveSearchAsync(userId, searchDto.City, searchDto, currentWeather);
+            }
 
             return Ok(forecast);
         }

@@ -70,7 +70,8 @@ const Dashboard: React.FC = () => {
           setCurrentWeather(weather);
           setCity(weather.city);
           setSelectedCity(weather.city);
-          const forecast = await weatherService.getForecast(weather.city);
+          // Don't save to history when loading saved location
+          const forecast = await weatherService.getForecast(weather.city, false);
           setForecastData(forecast);
         } catch (err: any) {
           console.error('Failed to load saved location:', err);
@@ -125,7 +126,8 @@ const Dashboard: React.FC = () => {
             setCurrentWeather(weather);
             setCity(weather.city);
             setSelectedCity(weather.city);
-            const forecast = await weatherService.getForecast(weather.city);
+            // Don't save to history when getting location (it's not a deliberate search)
+            const forecast = await weatherService.getForecast(weather.city, false);
             setForecastData(forecast);
             
             // Save location to localStorage

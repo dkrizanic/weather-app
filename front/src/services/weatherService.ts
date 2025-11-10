@@ -57,8 +57,8 @@ export const weatherService = {
     return response.data;
   },
 
-  async getForecast(city: string): Promise<ForecastData> {
-    const response = await api.post('/weather/forecast', { city });
+  async getForecast(city: string, saveHistory: boolean = true): Promise<ForecastData> {
+    const response = await api.post(`/weather/forecast?saveHistory=${saveHistory}`, { city });
     return response.data;
   },
 
