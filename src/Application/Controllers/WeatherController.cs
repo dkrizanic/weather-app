@@ -20,6 +20,16 @@ public class WeatherController : ControllerBase
         _searchHistoryService = searchHistoryService;
     }
 
+    private ActionResult<string> GetAuthenticatedUserId()
+    {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized(new { message = "User not authenticated" });
+        }
+        return userId;
+    }
+
     [HttpGet("current/{city}")]
     public async Task<ActionResult<CurrentWeatherDto>> GetCurrentWeather(string city)
     {
@@ -53,12 +63,11 @@ public class WeatherController : ControllerBase
     {
         try
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized(new { message = "User not authenticated" });
-            }
-
+            var userIdResult = GetAuthenticatedUserId();
+            if (userIdResult.Result is UnauthorizedObjectResult)
+                return userIdResult.Result;
+            
+            var userId = userIdResult.Value!;
             var forecast = await _weatherService.GetForecastAsync(searchDto.City);
             
             // Only save search history if explicitly requested
@@ -84,12 +93,11 @@ public class WeatherController : ControllerBase
     {
         try
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized(new { message = "User not authenticated" });
-            }
-
+            var userIdResult = GetAuthenticatedUserId();
+            if (userIdResult.Result is UnauthorizedObjectResult)
+                return userIdResult.Result;
+            
+            var userId = userIdResult.Value!;
             var history = await _searchHistoryService.GetUserSearchHistoryAsync(userId);
             return Ok(history);
         }
@@ -104,12 +112,11 @@ public class WeatherController : ControllerBase
     {
         try
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized(new { message = "User not authenticated" });
-            }
-
+            var userIdResult = GetAuthenticatedUserId();
+            if (userIdResult.Result is UnauthorizedObjectResult)
+                return userIdResult.Result;
+            
+            var userId = userIdResult.Value!;
             var stats = await _searchHistoryService.GetUserStatisticsAsync(userId);
             return Ok(stats);
         }
