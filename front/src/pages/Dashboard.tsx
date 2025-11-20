@@ -152,15 +152,15 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-4 text-gray-800">Search Weather</h2>
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md transition-colors">
+        <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">Search Weather</h2>
         <form onSubmit={handleSearch} className="flex gap-4">
           <input
             type="text"
             value={city}
             onChange={(e) => setCity(e.target.value)}
             placeholder="Enter city name..."
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
           />
           <button
             type="submit"
@@ -194,16 +194,16 @@ const Dashboard: React.FC = () => {
       {currentWeather && <WeatherCard weather={currentWeather} />}
       
       {forecastData && filteredForecast.length > 0 && (
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md transition-colors">
           <div className="mb-6">
-            <h2 className="text-2xl font-bold mb-4 text-gray-800">
+            <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">
               Weather Forecast - {selectedCity}
             </h2>
             
             {/* Filter Controls */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg transition-colors">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Time Period
                 </label>
                 <select
@@ -213,7 +213,7 @@ const Dashboard: React.FC = () => {
                     setStartDate('');
                     setEndDate('');
                   }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 >
                   <option value="3days">Next 3 Days</option>
                   <option value="5days">Next 5 Days</option>
@@ -222,7 +222,7 @@ const Dashboard: React.FC = () => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Start Date
                 </label>
                 <input
@@ -232,12 +232,12 @@ const Dashboard: React.FC = () => {
                     setStartDate(e.target.value);
                     setDateFilter('all');
                   }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   End Date
                 </label>
                 <input
@@ -247,7 +247,7 @@ const Dashboard: React.FC = () => {
                     setEndDate(e.target.value);
                     setDateFilter('all');
                   }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 />
               </div>
             </div>
@@ -259,7 +259,7 @@ const Dashboard: React.FC = () => {
                 className={`px-4 py-2 rounded-lg transition ${
                   viewMode === 'both'
                     ? 'bg-blue-500 text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    : 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-500'
                 }`}
               >
                 Both Views
@@ -269,7 +269,7 @@ const Dashboard: React.FC = () => {
                 className={`px-4 py-2 rounded-lg transition ${
                   viewMode === 'grid'
                     ? 'bg-blue-500 text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    : 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-500'
                 }`}
               >
                 Grid Only
@@ -279,14 +279,14 @@ const Dashboard: React.FC = () => {
                 className={`px-4 py-2 rounded-lg transition ${
                   viewMode === 'chart'
                     ? 'bg-blue-500 text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    : 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-500'
                 }`}
               >
                 Chart Only
               </button>
             </div>
 
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               Showing {filteredForecast.length} day(s) of forecast data
             </p>
           </div>
@@ -294,7 +294,7 @@ const Dashboard: React.FC = () => {
           {/* Grid View */}
           {(viewMode === 'both' || viewMode === 'grid') && (
             <div className="mb-6">
-              <h3 className="text-xl font-semibold mb-3 text-gray-700">Data Grid</h3>
+              <h3 className="text-xl font-semibold mb-3 text-gray-700 dark:text-gray-300">Data Grid</h3>
               <ForecastGrid forecast={filteredForecast} />
             </div>
           )}
@@ -302,7 +302,7 @@ const Dashboard: React.FC = () => {
           {/* Chart View */}
           {(viewMode === 'both' || viewMode === 'chart') && (
             <div>
-              <h3 className="text-xl font-semibold mb-3 text-gray-700">Data Visualization</h3>
+              <h3 className="text-xl font-semibold mb-3 text-gray-700 dark:text-gray-300">Data Visualization</h3>
               <ForecastChart forecast={filteredForecast} />
             </div>
           )}

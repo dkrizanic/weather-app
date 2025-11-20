@@ -43,8 +43,8 @@ const Statistics: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Top Cities */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-xl font-bold mb-4 text-gray-800">Top 3 Searched Cities</h3>
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md transition-colors">
+        <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-gray-100">Top 3 Searched Cities</h3>
         {stats.topCities && stats.topCities.length > 0 ? (
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={stats.topCities} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
@@ -75,15 +75,15 @@ const Statistics: React.FC = () => {
             </BarChart>
           </ResponsiveContainer>
         ) : (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             <p>No search data available yet. Start searching for cities to see statistics!</p>
           </div>
         )}
       </div>
 
       {/* Weather Distribution */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-xl font-bold mb-4 text-gray-800">Weather Conditions Distribution</h3>
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md transition-colors">
+        <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-gray-100">Weather Conditions Distribution</h3>
         {stats.weatherDistribution && stats.weatherDistribution.length > 0 ? (
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
@@ -106,32 +106,32 @@ const Statistics: React.FC = () => {
             </PieChart>
           </ResponsiveContainer>
         ) : (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             <p>No weather condition data available yet.</p>
           </div>
         )}
       </div>
 
       {/* Recent Searches */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-xl font-bold mb-4 text-gray-800">Recent Searches</h3>
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md transition-colors">
+        <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-gray-100">Recent Searches</h3>
         {stats.recentSearches && stats.recentSearches.length > 0 ? (
           <div className="space-y-3">
             {stats.recentSearches.map((search) => (
-              <div key={search.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div key={search.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg transition-colors">
                 <div>
-                  <p className="font-semibold text-gray-800">{search.city}, {search.country}</p>
-                  <p className="text-sm text-gray-500">{new Date(search.searchDate).toLocaleString()}</p>
+                  <p className="font-semibold text-gray-800 dark:text-gray-100">{search.city}, {search.country}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{new Date(search.searchDate).toLocaleString()}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-2xl font-bold text-blue-600">{search.temperature}°C</p>
-                  <p className="text-sm text-gray-600 capitalize">{search.description}</p>
+                  <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{search.temperature}°C</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 capitalize">{search.description}</p>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             <p>No recent searches yet.</p>
           </div>
         )}
