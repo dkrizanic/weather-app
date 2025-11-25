@@ -12,7 +12,7 @@ Prereqs: Docker, Docker Compose, OpenWeather API key
 ```bash
 git clone https://github.com/dkrizanic/weather-app.git
 cd weather-app
-cp .env.example .env    # add OPENWEATHER_API_KEY
+cp .env.example .env    # add OPENWEATHER_API_KEY, for demo: 3f4bccabb8892511f49eb155113f8a26
 docker-compose up --build
 ```
 Frontend: http://localhost:3000  
